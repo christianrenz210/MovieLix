@@ -1,0 +1,9 @@
+{
+  "name": "movielix",
+  "version": "1.0.0",
+  "description": "MovieLix - Netflix-style streaming site powered by VidAPI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
