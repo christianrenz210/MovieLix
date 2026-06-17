@@ -49,13 +49,16 @@ async function fetchText(url) {
 
 async function fetchMovies(pages = 5) {
   const all = [];
+  const promises = [];
   for (let i = 1; i <= pages; i++) {
-    const data = await fetchJSON(API.moviePage(i));
+    promises.push(fetchJSON(API.moviePage(i)));
+  }
+  const results = await Promise.all(promises);
+  for (const data of results) {
     if (data && data.items) {
       all.push(...data.items.map(item => normalizeItem(item, 'movie')));
-      movieTotalPages = data.total_pages;
+      if (data.total_pages) movieTotalPages = data.total_pages;
     }
-    if (data && i >= data.total_pages) break;
   }
   lastMoviePage = Math.max(lastMoviePage, pages);
   return all;
@@ -63,13 +66,16 @@ async function fetchMovies(pages = 5) {
 
 async function fetchTVShows(pages = 5) {
   const all = [];
+  const promises = [];
   for (let i = 1; i <= pages; i++) {
-    const data = await fetchJSON(API.tvPage(i));
+    promises.push(fetchJSON(API.tvPage(i)));
+  }
+  const results = await Promise.all(promises);
+  for (const data of results) {
     if (data && data.items) {
       all.push(...data.items.map(item => normalizeItem(item, 'tv')));
-      tvTotalPages = data.total_pages;
+      if (data.total_pages) tvTotalPages = data.total_pages;
     }
-    if (data && i >= data.total_pages) break;
   }
   lastTVPage = Math.max(lastTVPage, pages);
   return all;
@@ -533,7 +539,7 @@ async function initHomepage() {
   showLoading(rowsContainer);
 
   allMovies = await fetchMovies(5);
-  allTVShows = await fetchTVShows(5);
+  allTVShows = await fetchTVShows(15);
   allGenres = extractGenres(allMovies);
 
   rowsContainer.innerHTML = '';
