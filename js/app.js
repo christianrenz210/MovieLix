@@ -583,7 +583,7 @@ async function initHomepage() {
 
   renderRow('latestMoviesRow', allMovies, 'Latest Movies');
   renderRow('latestTVRow', allTVShows, 'Latest TV Shows');
-  renderRow('topTVRow', sortedTVShows, 'Top TV Shows');
+  renderRow('topTVRow', sortedTVShows.slice(0, 10), 'Top TV Shows');
   renderRow('trendingRow', sortedMovies, 'Trending Now');
   renderRow('topRatedRow', topRated, 'Top Rated');
 
