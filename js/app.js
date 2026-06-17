@@ -631,9 +631,22 @@ function renderTop10Section() {
   const container = document.getElementById('top10Section');
   if (!container || !allTVShows || allTVShows.length === 0) return;
 
-  const top10 = [...allTVShows]
-    .sort((a, b) => parseFloat(b.popularity || 0) - parseFloat(a.popularity || 0))
-    .slice(0, 10);
+  const priorityTitles = ['The WONDERfools', 'Viral Hit', 'Sins and Roses', 'My Royal Nemesis', 'Maximum Pleasure Guaranteed', 'Unconditional', 'Teach You a Lesson'];
+  const priority = [];
+  const rest = [];
+
+  for (const item of allTVShows) {
+    if (priorityTitles.includes(item.title) && !priority.some(p => p.title === item.title)) {
+      priority.push(item);
+    } else {
+      rest.push(item);
+    }
+  }
+
+  priority.sort((a, b) => priorityTitles.indexOf(a.title) - priorityTitles.indexOf(b.title));
+  rest.sort((a, b) => parseFloat(b.popularity || 0) - parseFloat(a.popularity || 0));
+
+  const top10 = [...priority, ...rest].slice(0, 10);
 
   if (top10.length === 0) return;
 
