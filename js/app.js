@@ -579,9 +579,11 @@ async function initHomepage() {
 
   const sortedMovies = [...allMovies].sort((a, b) => parseFloat(b.popularity || 0) - parseFloat(a.popularity || 0));
   const topRated = [...allMovies].sort((a, b) => parseFloat(b.rating || 0) - parseFloat(a.rating || 0));
+  const sortedTVShows = [...allTVShows].sort((a, b) => parseFloat(b.popularity || 0) - parseFloat(a.popularity || 0));
 
   renderRow('latestMoviesRow', allMovies, 'Latest Movies');
   renderRow('latestTVRow', allTVShows, 'Latest TV Shows');
+  renderRow('topTVRow', sortedTVShows, 'Top TV Shows');
   renderRow('trendingRow', sortedMovies, 'Trending Now');
   renderRow('topRatedRow', topRated, 'Top Rated');
 
