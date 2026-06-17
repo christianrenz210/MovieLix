@@ -623,6 +623,77 @@ async function initHomepage() {
     rightArrow.addEventListener('click', () => { rowContent.scrollBy({ left: scrollAmount(), behavior: 'smooth' }); });
     genreItems.forEach(item => rowContent.appendChild(createMovieCard(item)));
   });
+
+  renderTop10Section();
+}
+
+function renderTop10Section() {
+  const container = document.getElementById('top10Section');
+  if (!container || !allTVShows || allTVShows.length === 0) return;
+
+  const top10 = [...allTVShows]
+    .sort((a, b) => parseFloat(b.popularity || 0) - parseFloat(a.popularity || 0))
+    .slice(0, 10);
+
+  if (top10.length === 0) return;
+
+  const badges = ['recently-added', 'new-episode', 'recently-added', 'new-episode', 'recently-added', 'new-episode', 'recently-added', 'new-episode', 'watch-now', 'watch-now'];
+  const badgeLabels = ['Recently Added', 'New Episode', 'Recently Added', 'New Episode', 'Recently Added', 'New Episode', 'Recently Added', 'New Episode', 'Watch Now', 'Watch Now'];
+
+  const fallback = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="280"><rect width="200" height="280" fill="#222"/></svg>');
+
+  let html = `
+    <div class="top10-section">
+      <div class="top10-header">
+        <span class="top10-badge">TOP 10</span>
+        <h2 class="top10-title">TV Shows in the Philippines Today</h2>
+        <span class="top10-subtitle">Updated daily</span>
+      </div>
+      <div class="top10-carousel">`;
+
+  top10.forEach((item, i) => {
+    const rank = i + 1;
+    const poster = item.poster_url || '';
+    const rating = item.rating ? parseFloat(item.rating).toFixed(1) : '';
+    const badgeClass = badges[i] || 'recently-added';
+    const badgeLabel = badgeLabels[i] || 'Recently Added';
+    const year = item.year || '';
+
+    html += `
+        <div class="top10-card" data-type="${item._type || 'tv'}" data-id="${item.imdb_id || item.tmdb_id}">
+          <div class="top10-poster-wrap">
+            <span class="top10-rank">${rank}</span>
+            <img src="${poster}" alt="${item.title.replace(/"/g, '&quot;')}" loading="lazy" onerror="this.src='${fallback}'">
+            <div class="top10-overlay">
+              <span class="top10-badge-tag ${badgeClass}">${badgeLabel}</span>
+              <div class="top10-card-title">${item.title}</div>
+              <div class="top10-card-meta">
+                ${rating ? `<span class="rating-star">★</span> <span>${rating}</span>` : ''}
+                ${year ? `<span>${year}</span>` : ''}
+              </div>
+            </div>
+            ${badgeClass === 'watch-now' ? '<button class="top10-watch-btn">▶ Watch Now</button>' : ''}
+          </div>
+        </div>`;
+  });
+
+  html += `
+      </div>
+    </div>`;
+
+  container.innerHTML = html;
+
+  container.querySelectorAll('.top10-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.id;
+      const type = card.dataset.type;
+      const item = top10.find(i => (i.imdb_id || i.tmdb_id) === id);
+      if (item) {
+        sessionStorage.setItem('movielix_item', JSON.stringify(item));
+        window.location.href = `watch.html?type=${type}&id=${id}`;
+      }
+    });
+  });
 }
 
 async function initMoviesPage() {
