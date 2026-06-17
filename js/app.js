@@ -461,31 +461,43 @@ let closeSearchOverlay = () => {};
 
 function setupSearchOverlay() {
   const searchToggle = document.getElementById('searchToggle');
-  const searchOverlay = document.getElementById('searchOverlay');
+  const navSearch = document.getElementById('navSearch');
   const searchInput = document.getElementById('globalSearchInput');
   const searchResults = document.getElementById('searchResults');
   const closeSearch = document.getElementById('closeSearch');
 
-  if (!searchToggle || !searchOverlay) return;
+  if (!searchToggle || !navSearch) return;
 
   searchToggle.addEventListener('click', (e) => {
     e.preventDefault();
-    searchOverlay.classList.add('active');
-    setTimeout(() => searchInput.focus(), 100);
+    const isActive = navSearch.classList.contains('active');
+    if (isActive) {
+      closeSearchOverlay();
+    } else {
+      navSearch.classList.add('active');
+      setTimeout(() => searchInput.focus(), 100);
+    }
   });
 
   closeSearchOverlay = () => {
-    searchOverlay.classList.remove('active');
+    navSearch.classList.remove('active');
+    searchResults.classList.remove('active');
     searchInput.value = '';
     searchResults.innerHTML = '';
   };
 
   if (closeSearch) closeSearch.addEventListener('click', closeSearchOverlay);
-  searchOverlay.addEventListener('click', (e) => {
-    if (e.target === searchOverlay) closeSearchOverlay();
-  });
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeSearchOverlay();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (navSearch.classList.contains('active') &&
+        !e.target.closest('.nav-search-container') &&
+        !e.target.closest('.nav-search-results')) {
+      closeSearchOverlay();
+    }
   });
 
   let debounceTimer;
@@ -493,10 +505,15 @@ function setupSearchOverlay() {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
       const q = searchInput.value.trim();
-      if (q.length < 2) { searchResults.innerHTML = ''; return; }
+      if (q.length < 2) {
+        searchResults.classList.remove('active');
+        searchResults.innerHTML = '';
+        return;
+      }
       const allItems = [...allMovies, ...allTVShows];
       const results = filterBySearch(allItems, q).slice(0, 20);
       renderSearchResults(results, searchResults, q);
+      searchResults.classList.add('active');
 
       if (results.length < 20 && (lastMoviePage < movieTotalPages || lastTVPage < tvTotalPages)) {
         expandSearch(q, searchResults);
