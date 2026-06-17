@@ -495,7 +495,7 @@ function setupSearchOverlay() {
   document.addEventListener('click', (e) => {
     if (navSearch.classList.contains('active') &&
         !e.target.closest('.nav-search-container') &&
-        !e.target.closest('.nav-search-results')) {
+        !e.target.closest('#searchResults')) {
       closeSearchOverlay();
     }
   });
