@@ -631,7 +631,7 @@ function renderTop10Section() {
   const container = document.getElementById('top10Section');
   if (!container || !allTVShows || allTVShows.length === 0) return;
 
-  const priorityTitles = ['The WONDERfools', 'Viral Hit', 'Sins and Roses', 'My Royal Nemesis', 'Maximum Pleasure Guaranteed', 'Unconditional', 'Teach You a Lesson'];
+  const priorityTitles = ['Teach You a Lesson', 'The WONDERfools', 'Viral Hit', 'Sins and Roses', 'My Royal Nemesis', 'Maximum Pleasure Guaranteed', 'Unconditional'];
   const priority = [];
   const rest = [];
 
@@ -672,10 +672,12 @@ function renderTop10Section() {
     const badgeLabel = badgeLabels[i] || 'Recently Added';
     const year = item.year || '';
 
+    const rankSvg = `<svg class="top10-rank-svg" viewBox="0 0 120 150" preserveAspectRatio="xMinYMax meet"><text x="0" y="138" fill="#fff" stroke="#595959" stroke-width="4" font-weight="900" font-size="165" font-family="'Helvetica Neue', Arial, sans-serif">${rank}</text></svg>`;
+
     html += `
         <div class="top10-card" data-type="${item._type || 'tv'}" data-id="${item.imdb_id || item.tmdb_id}">
+          ${rankSvg}
           <div class="top10-poster-wrap">
-            <span class="top10-rank">${rank}</span>
             <img src="${poster}" alt="${item.title.replace(/"/g, '&quot;')}" loading="lazy" onerror="this.src='${fallback}'">
             <div class="top10-overlay">
               <span class="top10-badge-tag ${badgeClass}">${badgeLabel}</span>

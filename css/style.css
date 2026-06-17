@@ -1063,40 +1063,35 @@ body {
 .top10-card {
   flex: 0 0 auto;
   width: 320px;
+  height: 280px;
   position: relative;
   cursor: pointer;
   transition: transform 0.3s ease;
-  display: flex;
-  align-items: flex-end;
 }
 
 .top10-card:hover {
   transform: scale(1.04);
 }
 
-.top10-rank {
-  font-size: 12rem;
-  font-weight: 900;
-  color: var(--netflix-text);
-  line-height: 0.8;
-  z-index: 2;
+.top10-rank-svg {
+  position: absolute;
+  left: -5px;
+  bottom: 0;
+  height: 95%;
+  z-index: 1;
   pointer-events: none;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  user-select: none;
-  text-shadow: -2px -2px 0 rgba(0,0,0,0.3), 2px 2px 0 rgba(0,0,0,0.3), -2px 2px 0 rgba(0,0,0,0.3), 2px -2px 0 rgba(0,0,0,0.3);
-  margin-bottom: -8px;
-  flex-shrink: 0;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
 }
 
 .top10-poster-wrap {
-  position: relative;
+  position: absolute;
+  right: 0;
+  bottom: 0;
   width: 200px;
-  min-width: 200px;
   height: 280px;
   border-radius: 6px;
   overflow: hidden;
-  z-index: 3;
-  margin-left: -65px;
+  z-index: 2;
   box-shadow: 0 4px 15px rgba(0,0,0,0.6);
 }
 
@@ -1200,25 +1195,23 @@ body {
 /* Top 10 Responsive */
 @media (max-width: 1200px) {
   .top10-section { padding: 2rem; }
-  .top10-card { width: 290px; }
-  .top10-poster-wrap { width: 180px; min-width: 180px; height: 250px; margin-left: -55px; }
-  .top10-rank { font-size: 10rem; }
+  .top10-card { width: 290px; height: 250px; }
+  .top10-poster-wrap { width: 180px; height: 250px; }
 }
 
 @media (max-width: 768px) {
   .top10-section { padding: 1.5rem 1rem; }
   .top10-title { font-size: 1.1rem; }
   .top10-subtitle { display: none; }
-  .top10-card { width: 240px; }
-  .top10-poster-wrap { width: 150px; min-width: 150px; height: 210px; margin-left: -45px; }
-  .top10-rank { font-size: 8rem; }
+  .top10-card { width: 240px; height: 210px; }
+  .top10-poster-wrap { width: 150px; height: 210px; }
   .top10-card-title { font-size: 0.8rem; }
 }
 
 @media (max-width: 480px) {
-  .top10-card { width: 200px; }
-  .top10-poster-wrap { width: 130px; min-width: 130px; height: 180px; margin-left: -35px; }
-  .top10-rank { font-size: 6.5rem; }
+  .top10-card { width: 200px; height: 180px; }
+  .top10-poster-wrap { width: 130px; height: 180px; }
+  .top10-rank-svg { height: 90%; }
   .top10-header { flex-wrap: wrap; }
 }
 
